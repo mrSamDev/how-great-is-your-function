@@ -3,24 +3,9 @@
 import { useForm } from "@tanstack/react-form";
 import { useRouter } from "@tanstack/react-router";
 import { useState } from "react";
-import { z } from "zod";
 import { CodeEditor } from "#/features/editor/components/CodeEditor";
 import { analyzeFunction } from "../serverFns";
-
-const schema = z.object({
-	code: z.string().min(10, "Paste at least a few lines of code"),
-	title: z.string().min(1, "Give your function a name").max(200),
-	description: z.string().max(1000).optional(),
-	tags: z.string(),
-});
-
-function parseTags(raw: string): string[] {
-	return raw
-		.split(",")
-		.map((t) => t.trim().toLowerCase())
-		.filter((t) => t.length > 0)
-		.slice(0, 10);
-}
+import { parseTags, submitFunctionSchema } from "./submit-form-schema";
 
 export function SubmitForm() {
 	const router = useRouter();
@@ -63,7 +48,8 @@ export function SubmitForm() {
 				name="code"
 				validators={{
 					onChange: ({ value }) =>
-						schema.shape.code.safeParse(value).error?.issues[0]?.message,
+						submitFunctionSchema.shape.code.safeParse(value).error?.issues[0]
+							?.message,
 				}}
 			>
 				{(field) => (
@@ -90,7 +76,8 @@ export function SubmitForm() {
 				name="title"
 				validators={{
 					onChange: ({ value }) =>
-						schema.shape.title.safeParse(value).error?.issues[0]?.message,
+						submitFunctionSchema.shape.title.safeParse(value).error?.issues[0]
+							?.message,
 				}}
 			>
 				{(field) => (
@@ -197,7 +184,7 @@ export function SubmitForm() {
 								Analyzing…
 							</>
 						) : (
-							"Analyze Function"
+							"Review Function"
 						)}
 					</button>
 				)}

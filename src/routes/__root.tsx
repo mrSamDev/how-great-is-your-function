@@ -19,11 +19,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 		meta: [
 			{ charSet: "utf-8" },
 			{ name: "viewport", content: "width=device-width, initial-scale=1" },
-			{ title: "How Great Is Your Function?" },
+			{ title: "how great is your function" },
 			{
 				name: "description",
 				content:
-					"Paste a TypeScript function. Get a structured score, AI critique, and concrete improvements — instantly.",
+					"Review a TypeScript function with deterministic scoring, AI feedback, and revision tracking.",
 			},
 		],
 		links: [{ rel: "stylesheet", href: appCss }],
@@ -39,7 +39,7 @@ function Nav() {
 					to="/"
 					className="font-bold text-slate-900 hover:text-blue-600 transition-colors text-sm"
 				>
-					fn<span className="text-blue-600">Score</span>
+					how great is your <span className="text-blue-600">function</span>
 				</Link>
 				<nav className="flex items-center gap-1">
 					<Link
@@ -74,7 +74,7 @@ function Nav() {
 						to="/submit"
 						className="ml-2 px-4 py-1.5 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
 					>
-						Analyze
+						Review
 					</Link>
 				</nav>
 			</div>

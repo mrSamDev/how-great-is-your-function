@@ -25,21 +25,21 @@ function Home() {
 			<section className="text-center space-y-4">
 				<div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-medium mb-2">
 					<Zap className="w-3 h-3" />
-					Lint + AI Review + Playground in one
+					Static scoring, AI review, and revision tracking
 				</div>
 				<h1 className="text-4xl font-bold text-slate-900 tracking-tight">
-					How great is your function?
+					how great is your function
 				</h1>
 				<p className="text-lg text-slate-500 max-w-xl mx-auto">
-					Paste a TypeScript function. Get a structured score, AI critique, and
-					concrete improvements — instantly.
+					Submit a TypeScript function and get a clear score, AI feedback, and
+					practical improvements.
 				</p>
 				<div className="flex items-center justify-center gap-3">
 					<Link
 						to="/submit"
 						className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition-colors"
 					>
-						Analyze a function
+						Review a function
 						<ArrowRight className="w-4 h-4" />
 					</Link>
 					<Link

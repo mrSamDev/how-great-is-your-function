@@ -1,6 +1,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Calendar, Eye, Tag } from "lucide-react";
+import { CodeBlock } from "#/features/editor/components/CodeBlock";
 import { AiFeedback } from "#/features/function/components/AiFeedback";
 import { CommentThread } from "#/features/function/components/CommentThread";
 import { ScoreBreakdown } from "#/features/function/components/ScoreBreakdown";
@@ -75,17 +76,7 @@ function FunctionDetail() {
 			</section>
 
 			{/* Code */}
-			<section className="rounded-xl border border-slate-200 bg-white overflow-hidden">
-				<div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100 bg-slate-50">
-					<span className="text-xs font-medium text-slate-500">TypeScript</span>
-					<span className="text-xs text-slate-400">
-						{fn.code.split("\n").length} lines
-					</span>
-				</div>
-				<pre className="p-5 text-sm font-mono text-slate-800 leading-relaxed overflow-x-auto whitespace-pre bg-slate-950 text-slate-100">
-					{fn.code}
-				</pre>
-			</section>
+			<CodeBlock code={fn.code} />
 
 			{/* AI Feedback */}
 			<AiFeedback feedback={fn.aiFeedback} />
@@ -117,9 +108,11 @@ function FunctionDetail() {
 								<span>→</span>
 								<span className="font-medium">{rev.score}</span>
 							</div>
-							<pre className="text-xs font-mono text-slate-600 bg-slate-50 rounded-lg p-3 overflow-x-auto whitespace-pre">
-								{rev.improvedCode}
-							</pre>
+							<CodeBlock
+								code={rev.improvedCode}
+								className="overflow-hidden rounded-xl border border-slate-200"
+								showLineNumbers={false}
+							/>
 						</div>
 					))}
 				</section>

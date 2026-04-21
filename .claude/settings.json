@@ -1,0 +1,27 @@
+{
+   "allow": [
+      "mcp__plugin_context-mode_context-mode__execute"
+    ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/block-env-files.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/enforce-pnpm.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

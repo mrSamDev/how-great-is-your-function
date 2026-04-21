@@ -1,0 +1,25 @@
+{
+  "projectName": "how-great-is-your-function",
+  "mode": "file-router",
+  "typescript": true,
+  "packageManager": "pnpm",
+  "includeExamples": false,
+  "tailwind": true,
+  "addOnOptions": {},
+  "envVarValues": {},
+  "git": true,
+  "install": true,
+  "routerOnly": false,
+  "version": 1,
+  "framework": "react",
+  "chosenAddOns": [
+    "biome",
+    "cloudflare",
+    "form",
+    "t3env",
+    "better-auth",
+    "tanstack-query",
+    "table",
+    "compiler"
+  ]
+}

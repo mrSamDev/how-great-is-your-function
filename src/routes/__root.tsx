@@ -33,20 +33,21 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function Nav() {
 	return (
-		<header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-sm">
-			<div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+		<header className="sticky top-0 z-50 px-3 pt-3">
+			<div className="comic-panel mx-auto flex h-auto max-w-6xl items-center justify-between gap-3 bg-[#fffaf0]/95 px-4 py-3 backdrop-blur-sm">
 				<Link
 					to="/"
-					className="font-bold text-slate-900 hover:text-blue-600 transition-colors text-sm"
+					className="comic-heading max-w-[16rem] text-[0.8rem] leading-tight text-slate-950 transition-transform hover:-rotate-1"
 				>
-					how great is your <span className="text-blue-600">function</span>
+					how great is your <span className="text-[#ff5d47]">function</span>
 				</Link>
-				<nav className="flex items-center gap-1">
+				<nav className="flex flex-wrap items-center justify-end gap-2">
 					<Link
 						to="/"
-						className="px-3 py-1.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+						className="comic-kicker rounded-full border-3 border-slate-950 bg-white px-3 py-1.5 text-[0.68rem] text-slate-700 transition-transform hover:-translate-y-0.5"
 						activeProps={{
-							className: "bg-slate-100 text-slate-900 font-medium",
+							className:
+								"comic-kicker rounded-full border-3 border-slate-950 bg-[#ffd84d] px-3 py-1.5 text-[0.68rem] text-slate-950 shadow-[3px_3px_0_#101010]",
 						}}
 						activeOptions={{ exact: true }}
 					>
@@ -54,25 +55,27 @@ function Nav() {
 					</Link>
 					<Link
 						to="/search"
-						className="px-3 py-1.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+						className="comic-kicker rounded-full border-3 border-slate-950 bg-white px-3 py-1.5 text-[0.68rem] text-slate-700 transition-transform hover:-translate-y-0.5"
 						activeProps={{
-							className: "bg-slate-100 text-slate-900 font-medium",
+							className:
+								"comic-kicker rounded-full border-3 border-slate-950 bg-[#ffd84d] px-3 py-1.5 text-[0.68rem] text-slate-950 shadow-[3px_3px_0_#101010]",
 						}}
 					>
 						Browse
 					</Link>
 					<Link
 						to="/leaderboard"
-						className="px-3 py-1.5 rounded-lg text-sm text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+						className="comic-kicker rounded-full border-3 border-slate-950 bg-white px-3 py-1.5 text-[0.68rem] text-slate-700 transition-transform hover:-translate-y-0.5"
 						activeProps={{
-							className: "bg-slate-100 text-slate-900 font-medium",
+							className:
+								"comic-kicker rounded-full border-3 border-slate-950 bg-[#ffd84d] px-3 py-1.5 text-[0.68rem] text-slate-950 shadow-[3px_3px_0_#101010]",
 						}}
 					>
 						Leaderboard
 					</Link>
 					<Link
 						to="/submit"
-						className="ml-2 px-4 py-1.5 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+						className="comic-button ml-1 bg-[#ff5d47] px-4 py-2 text-[0.72rem] text-white"
 					>
 						Review
 					</Link>
@@ -88,9 +91,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			<head>
 				<HeadContent />
 			</head>
-			<body className="bg-slate-50 text-slate-900 antialiased">
+			<body className="comic-app-shell antialiased">
 				<Nav />
-				<main>{children}</main>
+				<main className="pb-12">{children}</main>
 				<TanStackDevtools
 					config={{ position: "bottom-right" }}
 					plugins={[

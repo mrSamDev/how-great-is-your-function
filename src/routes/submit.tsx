@@ -7,10 +7,13 @@ export const Route = createFileRoute("/submit")({
 
 function SubmitPage() {
 	return (
-		<div className="max-w-2xl mx-auto px-4 py-10">
-			<div className="mb-8">
-				<h1 className="text-2xl font-bold text-slate-900">Review a Function</h1>
-				<p className="text-slate-500 mt-1 text-sm">
+		<div className="mx-auto max-w-4xl px-4 py-10">
+			<div className="comic-bubble mb-8 px-6 py-6 md:px-8">
+				<div className="comic-caption mb-4 text-slate-950">Review Booth</div>
+				<h1 className="comic-heading text-3xl text-slate-950 md:text-4xl">
+					Review a Function
+				</h1>
+				<p className="mt-2 max-w-2xl text-sm leading-7 text-slate-700 md:text-base">
 					Paste a TypeScript function to get a deterministic score and AI
 					feedback.
 				</p>

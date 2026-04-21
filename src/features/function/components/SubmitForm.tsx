@@ -41,9 +41,8 @@ export function SubmitForm() {
 				e.preventDefault();
 				form.handleSubmit();
 			}}
-			className="space-y-6"
+			className="comic-panel space-y-7 bg-[#fffaf0] p-6 md:p-8"
 		>
-			{/* Code */}
 			<form.Field
 				name="code"
 				validators={{
@@ -54,11 +53,8 @@ export function SubmitForm() {
 			>
 				{(field) => (
 					<div>
-						<label
-							htmlFor="code-editor"
-							className="block text-sm font-medium text-slate-700 mb-1.5"
-						>
-							Function Code <span className="text-red-400">*</span>
+						<label htmlFor="code-editor" className="comic-form-label">
+							Function Code <span className="text-[#ff5d47]">*</span>
 						</label>
 						<CodeEditor
 							id="code-editor"
@@ -71,7 +67,6 @@ export function SubmitForm() {
 				)}
 			</form.Field>
 
-			{/* Title */}
 			<form.Field
 				name="title"
 				validators={{
@@ -82,11 +77,8 @@ export function SubmitForm() {
 			>
 				{(field) => (
 					<div>
-						<label
-							htmlFor="title"
-							className="block text-sm font-medium text-slate-700 mb-1.5"
-						>
-							Title <span className="text-red-400">*</span>
+						<label htmlFor="title" className="comic-form-label">
+							Title <span className="text-[#ff5d47]">*</span>
 						</label>
 						<input
 							id="title"
@@ -94,27 +86,20 @@ export function SubmitForm() {
 							value={field.state.value}
 							onChange={(e) => field.handleChange(e.target.value)}
 							placeholder="e.g. Calculate Discount Price"
-							className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500"
+							className={`comic-input ${field.state.meta.errors[0] ? "comic-input-error" : ""}`}
 						/>
 						{field.state.meta.errors[0] && (
-							<p className="mt-1 text-xs text-red-500">
-								{field.state.meta.errors[0]}
-							</p>
+							<p className="comic-error-text">{field.state.meta.errors[0]}</p>
 						)}
 					</div>
 				)}
 			</form.Field>
 
-			{/* Description */}
 			<form.Field name="description">
 				{(field) => (
 					<div>
-						<label
-							htmlFor="description"
-							className="block text-sm font-medium text-slate-700 mb-1.5"
-						>
-							Description{" "}
-							<span className="text-slate-400 font-normal">(optional)</span>
+						<label htmlFor="description" className="comic-form-label">
+							Description <span className="comic-form-note">(optional)</span>
 						</label>
 						<textarea
 							id="description"
@@ -122,24 +107,17 @@ export function SubmitForm() {
 							onChange={(e) => field.handleChange(e.target.value)}
 							placeholder="What does this function do? Why does it exist?"
 							rows={3}
-							className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 resize-none"
+							className="comic-textarea"
 						/>
 					</div>
 				)}
 			</form.Field>
 
-			{/* Tags */}
 			<form.Field name="tags">
 				{(field) => (
 					<div>
-						<label
-							htmlFor="tags"
-							className="block text-sm font-medium text-slate-700 mb-1.5"
-						>
-							Tags{" "}
-							<span className="text-slate-400 font-normal">
-								(comma-separated)
-							</span>
+						<label htmlFor="tags" className="comic-form-label">
+							Tags <span className="comic-form-note">(comma-separated)</span>
 						</label>
 						<input
 							id="tags"
@@ -147,14 +125,14 @@ export function SubmitForm() {
 							value={field.state.value}
 							onChange={(e) => field.handleChange(e.target.value)}
 							placeholder="e.g. array, recursion, auth, performance"
-							className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500"
+							className="comic-input"
 						/>
 						{field.state.value && (
-							<div className="flex gap-1.5 flex-wrap mt-2">
+							<div className="mt-3 flex flex-wrap gap-2">
 								{parseTags(field.state.value).map((tag) => (
 									<span
 										key={tag}
-										className="px-2 py-0.5 rounded-md bg-blue-100 text-blue-700 text-xs"
+										className="comic-tag-chip px-3 py-1 text-slate-950"
 									>
 										{tag}
 									</span>
@@ -166,7 +144,7 @@ export function SubmitForm() {
 			</form.Field>
 
 			{serverError && (
-				<p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+				<p className="comic-error-panel px-4 py-3 text-sm text-[#a22816]">
 					{serverError}
 				</p>
 			)}
@@ -176,7 +154,7 @@ export function SubmitForm() {
 					<button
 						type="submit"
 						disabled={!canSubmit || isSubmitting}
-						className="w-full py-3 px-6 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+						className="comic-button flex w-full items-center justify-center gap-2 bg-[#ff5d47] px-6 py-3 text-[0.78rem] text-white disabled:translate-x-0 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-[4px_4px_0_#101010]"
 					>
 						{isSubmitting ? (
 							<>

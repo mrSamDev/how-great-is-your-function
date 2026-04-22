@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { Eye, MessageSquare } from "lucide-react";
+import { CodeBlock } from "#/features/editor/components/CodeBlock";
 import { getScoreColor, getScoreLabel } from "#/lib/ast";
 import type { FunctionEntity } from "../types";
 
@@ -47,12 +48,12 @@ export function FunctionCard({ fn, commentCount = 0 }: Props) {
 				</div>
 			</div>
 
-			<pre className="text-xs text-slate-600 bg-slate-50 rounded-lg p-3 overflow-hidden font-mono leading-relaxed line-clamp-4 whitespace-pre-wrap">
-				{previewLines}
-				{fn.code.split("\n").length > 4 && (
-					<span className="text-slate-400">…</span>
-				)}
-			</pre>
+			<CodeBlock
+				code={previewLines}
+				showLineNumbers={false}
+				showHeader={false}
+				className="overflow-hidden rounded-lg border border-slate-800 bg-[#0b1120]"
+			/>
 
 			<div className="flex items-center gap-4 mt-3">
 				{fn.tags.length > 0 && (

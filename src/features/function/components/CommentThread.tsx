@@ -3,6 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { MessageSquare } from "lucide-react";
 import { useState } from "react";
+import { authClient } from "#/lib/auth-client";
 import { queryKeys } from "../queries";
 import { postComment } from "../serverFns";
 import type { Comment } from "../types";
@@ -23,21 +24,21 @@ function timeAgo(iso: string): string {
 }
 
 export function CommentThread({ functionId, comments }: Props) {
+	const { data: session } = authClient.useSession();
 	const qc = useQueryClient();
 	const [text, setText] = useState("");
-	const [name, setName] = useState("");
 	const [submitting, setSubmitting] = useState(false);
 
 	async function handleSubmit(e: React.FormEvent) {
 		e.preventDefault();
-		if (!text.trim()) return;
+		if (!text.trim() || !session?.user) return;
 		setSubmitting(true);
 		try {
 			await postComment({
 				data: {
 					functionId,
 					content: text.trim(),
-					userName: name.trim() || "Anonymous",
+					userName: session.user.name ?? session.user.email ?? "Anonymous",
 				},
 			});
 			setText("");
@@ -62,7 +63,7 @@ export function CommentThread({ functionId, comments }: Props) {
 				<div className="space-y-3">
 					{comments.map((c) => (
 						<div key={c.id} className="flex gap-3">
-							<div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 text-xs font-semibold flex-shrink-0">
+							<div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 text-xs font-semibold shrink-0">
 								{c.userName[0]?.toUpperCase() ?? "?"}
 							</div>
 							<div className="flex-1">
@@ -83,32 +84,56 @@ export function CommentThread({ functionId, comments }: Props) {
 				</div>
 			)}
 
-			<form
-				onSubmit={handleSubmit}
-				className="space-y-2 pt-2 border-t border-slate-100"
-			>
-				<input
-					type="text"
-					value={name}
-					onChange={(e) => setName(e.target.value)}
-					placeholder="Your name (optional)"
-					className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30"
-				/>
-				<textarea
-					value={text}
-					onChange={(e) => setText(e.target.value)}
-					placeholder="Leave a comment…"
-					rows={3}
-					className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 resize-none"
-				/>
-				<button
-					type="submit"
-					disabled={!text.trim() || submitting}
-					className="px-4 py-2 rounded-lg bg-slate-900 text-white text-sm font-medium hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+			{session?.user ? (
+				<form
+					onSubmit={handleSubmit}
+					className="space-y-2 pt-2 border-t border-slate-100"
 				>
-					{submitting ? "Posting…" : "Post Comment"}
-				</button>
-			</form>
+					<div className="flex items-center gap-2 text-sm text-slate-500">
+						{session.user.image ? (
+							<img
+								src={session.user.image}
+								alt=""
+								className="w-6 h-6 rounded-full"
+							/>
+						) : (
+							<div className="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs font-semibold text-slate-600">
+								{session.user.name?.charAt(0).toUpperCase() ?? "U"}
+							</div>
+						)}
+						<span>Commenting as {session.user.name ?? session.user.email}</span>
+					</div>
+					<textarea
+						value={text}
+						onChange={(e) => setText(e.target.value)}
+						placeholder="Leave a comment…"
+						rows={3}
+						className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/30 resize-none"
+					/>
+					<button
+						type="submit"
+						disabled={!text.trim() || submitting}
+						className="px-4 py-2 rounded-lg bg-slate-900 text-white text-sm font-medium hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+					>
+						{submitting ? "Posting…" : "Post Comment"}
+					</button>
+				</form>
+			) : (
+				<div className="pt-2 border-t border-slate-100">
+					<button
+						type="button"
+						onClick={() =>
+							void authClient.signIn.social({
+								provider: "github",
+								callbackURL: window.location.pathname,
+							})
+						}
+						className="text-sm text-slate-500 hover:text-slate-800 transition-colors"
+					>
+						Sign in with GitHub to leave a comment →
+					</button>
+				</div>
+			)}
 		</div>
 	);
 }

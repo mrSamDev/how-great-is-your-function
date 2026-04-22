@@ -2,6 +2,7 @@ import { queryOptions } from "@tanstack/react-query";
 import {
 	getFunction,
 	getFunctionWithRevisions,
+	getUserVote,
 	listFunctions,
 	searchFunctions,
 } from "./serverFns";
@@ -15,6 +16,7 @@ export const queryKeys = {
 	search: (query: string, tags: string[], sort: "score" | "recent") =>
 		["search", query, tags, sort] as const,
 	leaderboard: () => ["leaderboard"] as const,
+	userVote: (functionId: string) => ["vote", functionId] as const,
 } as const;
 
 // ─── Query Options ────────────────────────────────────────────────────────────
@@ -65,5 +67,13 @@ export function leaderboardQueryOptions() {
 		queryFn: () =>
 			listFunctions({ data: { page: 1, limit: 20, sort: "score" } }),
 		staleTime: 60_000,
+	});
+}
+
+export function userVoteQueryOptions(functionId: string) {
+	return queryOptions({
+		queryKey: queryKeys.userVote(functionId),
+		queryFn: () => getUserVote({ data: { functionId } }),
+		staleTime: 30_000,
 	});
 }

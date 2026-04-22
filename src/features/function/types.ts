@@ -13,6 +13,16 @@ export type AiFeedback = {
 	suggestions: string[];
 };
 
+export type VoteType = "up" | "down";
+
+export type Vote = {
+	id: string;
+	functionId: string;
+	userId: string;
+	voteType: VoteType;
+	createdAt: string;
+};
+
 export type FunctionEntity = {
 	id: string;
 	code: string;
@@ -26,6 +36,8 @@ export type FunctionEntity = {
 	createdAt: string;
 	authorId?: string;
 	viewCount: number;
+	upvotes: number;
+	downvotes: number;
 };
 
 export type User = {

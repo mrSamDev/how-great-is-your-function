@@ -1,7 +1,7 @@
 import type { FunctionEntity } from "#/features/function/types";
 import { scoreFunction } from "./ast";
 
-type SeedFunction = Omit<FunctionEntity, "id" | "createdAt" | "viewCount">;
+type SeedFunction = Omit<FunctionEntity, "id" | "createdAt" | "viewCount" | "upvotes" | "downvotes">;
 
 const seedFunctions: SeedFunction[] = [
 	{

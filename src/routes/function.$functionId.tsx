@@ -5,6 +5,7 @@ import { CodeBlock } from "#/features/editor/components/CodeBlock";
 import { AiFeedback } from "#/features/function/components/AiFeedback";
 import { CommentThread } from "#/features/function/components/CommentThread";
 import { ScoreBreakdown } from "#/features/function/components/ScoreBreakdown";
+import { VoteButtons } from "#/features/function/components/VoteButtons";
 import { functionWithRevisionsQueryOptions } from "#/features/function/queries";
 
 export const Route = createFileRoute("/function/$functionId")({
@@ -64,6 +65,13 @@ function FunctionDetail() {
 						<Eye className="w-3 h-3" />
 						{fn.viewCount} views
 					</span>
+				</div>
+				<div className="mt-4">
+					<VoteButtons
+						functionId={fn.id}
+						upvotes={fn.upvotes}
+						downvotes={fn.downvotes}
+					/>
 				</div>
 			</div>
 

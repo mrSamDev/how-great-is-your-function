@@ -41,6 +41,48 @@ Build a platform that gives developers **fast, structured feedback on functions*
 
 ---
 
+## Authentication
+
+**Provider:** Better Auth with GitHub OAuth
+
+GitHub is the primary sign-in method. Developers already have GitHub accounts, and GitHub identity gives us profile images and usernames without any extra friction.
+
+### Setup
+
+```
+GITHUB_CLIENT_ID=...
+GITHUB_CLIENT_SECRET=...
+```
+
+Create an OAuth App at github.com/settings/developers. Set the callback URL to `http://localhost:3000/api/auth/callback/github` (dev) and your production domain for prod.
+
+### Implementation
+
+| File | Responsibility |
+|---|---|
+| `src/lib/auth.ts` | Better Auth config — GitHub social provider + email/password |
+| `src/lib/auth-client.ts` | Client-side auth hooks |
+| `src/integrations/better-auth/header-user.tsx` | Sign in / signed-in state UI |
+
+### Auth Flow
+
+- Unauthenticated users see **Sign in with GitHub** button in the header
+- OAuth callback redirects to `/` on success
+- Session exposed via `authClient.useSession()` across all routes
+- Signed-in users see their GitHub avatar + sign-out button
+
+### What Requires Auth (Phase 2+)
+
+| Action | Auth required |
+|---|---|
+| View functions | No |
+| Submit function | Yes |
+| Comment | Yes |
+| Submit revision | Yes |
+| View leaderboard | No |
+
+---
+
 ## Tech Stack
 
 > This project is intentionally built to deeply learn and understand TanStack Start. No external API server. No Express. No separate backend process. Everything runs through TanStack Start's server functions and RSC primitives.
@@ -89,6 +131,8 @@ const analyzeFunction = createServerFn()
 | `submitRevision` | Save improved code, compute score delta |
 | `postComment` | Attach comment to a function |
 | `getFunctionWithRevisions` | Fetch function + full revision history |
+| `voteFunction` | Cast/toggle up or down vote (session-validated) |
+| `getUserVote` | Return the current user's vote for a function |
 
 ### RSC Usage (TanStack RSC)
 
@@ -102,7 +146,8 @@ Server components own the read-heavy, non-interactive shell. Client components h
 | User profile stats | Diff viewer |
 
 ### Storage
-- Postgres (or SQLite for MVP)
+- **Cloudflare D1** (SQLite at the edge) — schema in `migrations/0001_initial.sql`
+- `src/lib/db.ts` exports `getDb()`: uses D1 adapter in Cloudflare context, in-memory fallback for local dev without wrangler
 - In-memory cache for AI responses — same input always returns same output, no re-runs
 
 ---
@@ -330,26 +375,27 @@ Server functions live colocated with the feature, not in a separate backend fold
 
 ## Feature Roadmap
 
-### Phase 1 — MVP
+### Phase 1 — MVP ✅
 - Paste function + select language
 - Add title, description, tags on submit
 - Deterministic scoring via server function
 - AI critique via server function
-- Score breakdown UI (RSC)
+- Score breakdown UI
 
-### Phase 2 — Interaction
+### Phase 2 — Interaction ✅
 - Comments (server function + client component)
-- Structured upvote/downvote (not Reddit-style)
+- Structured upvote/downvote — toggle behavior, session-validated, separate up/down counts
 - Versioning (improved function submissions)
-- Basic search — filter by tag, sort by score
+- Basic search — filter by tag, sort by score, 300ms debounce, sort state in URL
 
 ### Phase 3 — Refactor Engine
 - "Improve this function" (AI rewrite via server function)
 - Diff viewer
 - Score delta display
+- `/function/$functionId/revisions` route
 
 ### Phase 4 — Reputation System
-- User profiles
+- User profiles (`/profile/$userId`)
 - Contribution score
 - Badges ("Refactor Expert", etc.)
 

@@ -63,18 +63,25 @@
 
 ---
 
-## Phase 2 — Interaction (Next)
+## Phase 2 — Interaction (Done)
 
-- ⏳ Persistent storage: migrate in-memory → Cloudflare D1
-  - `wrangler d1 create how-great-is-your-function`
-  - Add D1 binding to `wrangler.jsonc`
-  - Create schema migrations
-  - Wire `src/lib/db.ts` to D1
-- ⏳ Auth flow: sign up / sign in (better-auth already wired)
-  - Add user session to server functions
-  - Gate submit/comment/revision behind auth
-- ⏳ Structured upvote/downvote (not Reddit-style)
-- ⏳ Basic search improvements: debounce, URL state sync
+- ✅ Persistent storage: migrate in-memory → Cloudflare D1
+  - Schema in `migrations/0001_initial.sql`
+  - D1 binding `DB` added to `wrangler.jsonc` (run `wrangler d1 create how-great-is-your-function` then paste the database_id)
+  - D1 adapter in `src/lib/db-d1.ts`
+  - `src/lib/db.ts` exports `getDb()` — uses D1 in CF context, in-memory fallback for local dev
+- ✅ Auth flow: GitHub OAuth via better-auth
+  - GitHub sign-in button in nav (`header-user.tsx`)
+  - `/submit` gated — unauthenticated users see sign-in prompt
+  - Comments gated — uses session identity, sign-in prompt for guests
+- ✅ Structured upvote/downvote
+  - `Vote` type + `upvotes`/`downvotes` on `FunctionEntity`
+  - `voteFunction` + `getUserVote` server functions (session-validated)
+  - `VoteButtons` component — toggle behavior, green/red active state, sign-in redirect for guests
+  - Wired into `/function/$functionId` detail page
+- ✅ Basic search improvements
+  - 300ms debounce on search input
+  - Sort state synced to URL params (shareable/bookmarkable)
 
 ---
 
@@ -108,7 +115,12 @@
 ## Config / Ops Notes
 
 - **ANTHROPIC_API_KEY**: Set as env var in `.env` for dev, `wrangler secret put ANTHROPIC_API_KEY` for Cloudflare prod
-- **D1 Database**: Not yet configured — in-memory store used for MVP
+- **GITHUB_CLIENT_ID / GITHUB_CLIENT_SECRET**: Required for GitHub OAuth — create an OAuth App at github.com/settings/developers, callback URL: `http://localhost:3000/api/auth/callback/github`
+- **D1 Database**: Schema ready in `migrations/0001_initial.sql`. To activate:
+  1. `wrangler d1 create how-great-is-your-function` → paste returned `database_id` into `wrangler.jsonc`
+  2. `wrangler d1 migrations apply how-great-is-your-function --local` (dev)
+  3. `wrangler d1 migrations apply how-great-is-your-function` (prod)
+  - Local dev without wrangler falls back to in-memory store automatically
 - **Deployment**: `pnpm run deploy` → Cloudflare Workers via wrangler
 
 ---
@@ -117,8 +129,9 @@
 
 | Decision | Rationale |
 |---|---|
-| In-memory store for MVP | Unblocks full stack development; swap for D1 later |
+| Cloudflare D1 with in-memory fallback | D1 for prod persistence; in-memory lets `vite dev` work without wrangler |
 | Heuristic scoring (no AST parser) | Cloudflare Workers compat; acorn/TS compiler don't work in Workers |
 | Fetch-based Anthropic API call | No extra SDK dep; works natively in Workers |
 | Textarea for code editor | Monaco not installed; upgrade path exists |
 | TypeScript-only for MVP | Simplest scope; multi-lang in Phase 5 |
+| Denormalized upvote/downvote counts | Faster reads; votes table tracks per-user for dedup and toggle |

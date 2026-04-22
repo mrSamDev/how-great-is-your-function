@@ -7,6 +7,7 @@ type Props = {
 	languageLabel?: string;
 	className?: string;
 	showLineNumbers?: boolean;
+	showHeader?: boolean;
 };
 
 export function CodeBlock({
@@ -14,6 +15,7 @@ export function CodeBlock({
 	languageLabel = "TypeScript",
 	className,
 	showLineNumbers = true,
+	showHeader = true,
 }: Props) {
 	const lines = code.split("\n");
 	let lineOffset = 0;
@@ -25,14 +27,16 @@ export function CodeBlock({
 				"overflow-hidden rounded-2xl border border-slate-800 bg-[#0b1120]"
 			}
 		>
-			<div className="flex items-center justify-between border-b border-slate-800 bg-slate-950/80 px-4 py-2.5">
-				<span className="text-[11px] font-medium uppercase tracking-[0.24em] text-slate-400">
-					{languageLabel}
-				</span>
-				<span className="text-xs font-mono text-slate-500">
-					{lines.length}L
-				</span>
-			</div>
+			{showHeader && (
+				<div className="flex items-center justify-between border-b border-slate-800 bg-slate-950/80 px-4 py-2.5">
+					<span className="text-[11px] font-medium uppercase tracking-[0.24em] text-slate-400">
+						{languageLabel}
+					</span>
+					<span className="text-xs font-mono text-slate-500">
+						{lines.length}L
+					</span>
+				</div>
+			)}
 			<div className="grid grid-cols-[auto_1fr]">
 				{showLineNumbers ? (
 					<div className="select-none border-r border-slate-800 bg-slate-950/60 px-3 py-4 text-right text-xs leading-6 text-slate-500">

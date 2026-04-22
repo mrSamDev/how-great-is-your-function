@@ -7,6 +7,7 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import BetterAuthHeader from "../integrations/better-auth/header-user";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
 
@@ -79,6 +80,9 @@ function Nav() {
 					>
 						Review
 					</Link>
+					<div className="ml-2 border-l-2 border-slate-950/20 pl-3">
+						<BetterAuthHeader />
+					</div>
 				</nav>
 			</div>
 		</header>
